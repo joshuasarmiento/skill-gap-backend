@@ -12,7 +12,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
+    "outDir": "./public",
     "rootDir": ".",
     "types": ["node"]
   },
@@ -27,6 +27,6 @@
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "public"
   ]
 }

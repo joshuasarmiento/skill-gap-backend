@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "esModuleInterop": true,
+    "noEmit": true,
+    "moduleResolution": "Bundler", // or "NodeNext"
+    "allowImportingTsExtensions": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": ".",
+    "types": ["node"]
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  },
+  "include": [
+    "backend/**/*",
+    "scraper/**/*",
+    "seed.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

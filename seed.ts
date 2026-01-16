@@ -1,5 +1,5 @@
-import { db } from './backend/src/db/index';
-import * as schema from './backend/src/db/schema';
+import { db } from './api/db/index';
+import * as schema from './api/db/schema';
 import { SKILLS_DICTIONARY } from './scraper/skill-list';
 
 async function seed() {

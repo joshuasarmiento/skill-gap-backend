@@ -7,8 +7,8 @@
     "seed": "tsx seed.ts",
     "scrape": "tsx scraper/index.ts",
     "rescrape": "tsx scraper/scrape.ts",
-    "server": "tsx backend/src/index.ts",
-    "dev": "tsx watch backend/src/index.ts"
+    "server": "tsx api/index.ts",
+    "dev": "tsx watch api/index.ts"
   },
   "author": "",
   "license": "ISC",

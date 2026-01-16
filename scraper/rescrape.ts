@@ -1,7 +1,7 @@
 import { chromium } from 'playwright-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-import { db } from '../backend/src/db/index';
-import * as schema from '../backend/src/db/schema';
+import { db } from '../api/db/index';
+import * as schema from '../api/db/schema';
 import { SKILLS_DICTIONARY } from './skill-list';
 import { sql, eq, isNull } from 'drizzle-orm';
 

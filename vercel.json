@@ -7,7 +7,7 @@
     }
   ],
   "functions": {
-    "backend/src/index.js": {
+    "backend/src/index.ts": {
       "memory": 512,
       "maxDuration": 30
     }

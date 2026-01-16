@@ -157,7 +157,7 @@ app.get('/api/export/summary', async (c) => {
 });
 
 const port = 3000;
-console.log(`🚀 Server running at http://localhost:${port}`);
+// console.log(`🚀 Server running at http://localhost:${port}`);
 
 serve({
   fetch: app.fetch,

@@ -2,7 +2,7 @@
   "name": "job-skills-scraper",
   "version": "1.0.0",
   "scripts": {
-    "build": "tsc",
+    "build": "rimraf dist && tsc",
     "start": "node dist/api/index.js",
     "db:push": "npx drizzle-kit push",
     "seed": "tsx seed.ts",

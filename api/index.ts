@@ -2,8 +2,8 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { handle } from 'hono/vercel';
 import { serve } from '@hono/node-server';
-import { db } from './db/index.js';
-import { regions, skillDemand, skills } from './db/schema.js';
+import { db } from './db/index';
+import { regions, skillDemand, skills } from './db/schema';
 import { eq, desc, sql, inArray } from 'drizzle-orm';
 import { NCR_DISTRICT_CONFIG } from './utils/ncrData';
 

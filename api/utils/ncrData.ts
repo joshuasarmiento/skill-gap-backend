@@ -1,5 +1,3 @@
-// src/utils/ncrData.ts
-
 export const NCR_DISTRICT_CONFIG: Record<string, string[]> = {
   'NCR, City of Manila, First District (Not a Province)': [
     'manila-city-metro-manila'

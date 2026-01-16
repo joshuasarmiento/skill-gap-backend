@@ -1,12 +1,13 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+import { handle } from 'hono/vercel';
 import { serve } from '@hono/node-server';
 import { db } from './db/index.js';
 import { regions, skillDemand, skills } from './db/schema.js';
 import { eq, desc, sql, inArray } from 'drizzle-orm';
 import { NCR_DISTRICT_CONFIG } from './utils/ncrData';
 
-const app = new Hono();
+const app = new Hono().basePath('/api');
 
 // Enable CORS for all API routes
 app.use('/api/*', cors());
@@ -156,10 +157,26 @@ app.get('/api/export/summary', async (c) => {
   });
 });
 
-const port = 3000;
-// console.log(`🚀 Server running at http://localhost:${port}`);
+// Production
+export const GET = handle(app);
+export const POST = handle(app);
 
-serve({
-  fetch: app.fetch,
-  port
-});
+if (process.env.NODE_ENV !== 'production') {
+  const port = 3000
+  console.log(`🚀 Node Server running on http://localhost:${port}`)
+  serve({ fetch: app.fetch, port })
+}
+
+// Development
+// const port = 3000;
+// console.log(`🚀 Server running at http://localhost:${port}`);
+// Export the handler for Vercel
+
+// serve({
+//   fetch: app.fetch,
+//   // port
+// });
+
+export default app
+
+

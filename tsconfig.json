@@ -3,7 +3,7 @@
     "target": "ES2022",
     "module": "ES2022",
     "esModuleInterop": true,
-    "noEmit": true,
+    "noEmit": false,
     "moduleResolution": "Bundler", // or "NodeNext"
     "allowImportingTsExtensions": false,
     "allowSyntheticDefaultImports": true,

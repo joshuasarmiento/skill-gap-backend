@@ -7,7 +7,7 @@ import { regions, skillDemand, skills } from './db/schema';
 import { eq, desc, sql, inArray } from 'drizzle-orm';
 import { NCR_DISTRICT_CONFIG } from './utils/ncrData';
 
-const app = new Hono().basePath('/api');
+const app = new Hono();
 
 // Enable CORS for all API routes
 app.use('/api/*', cors());

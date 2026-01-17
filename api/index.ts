@@ -10,7 +10,14 @@ import { NCR_DISTRICT_CONFIG } from './utils/ncrData';
 const app = new Hono();
 
 // Enable CORS for all API routes
-app.use('/api/*', cors());
+app.use('/api/*', cors({
+    origin: 'https://skill-gap-frontend.vercel.app',
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowHeaders: ['Content-Type', 'Authorization'],
+    exposeHeaders: ['Content-Length'],
+    maxAge: 600,
+    credentials: true,
+  }));
 
 // Home route
 app.get('/', (c) => {

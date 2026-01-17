@@ -13,7 +13,7 @@ const app = new Hono();
 app.use('/api/*', cors({
     origin: (origin) => {
       const allowedOrigins = [
-        'https://skill-gap-frontend.vercel.app',
+        'https://skill-gap-ph.vercel.app',
         'http://localhost:3000', // or whatever your local frontend port is
         'http://localhost:5173'  // common Vite port
       ];

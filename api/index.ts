@@ -11,11 +11,14 @@ const app = new Hono();
 
 // Enable CORS for all API routes
 app.use('/api/*', cors({
-    origin: 'https://skill-gap-frontend.vercel.app',
-    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization'],
-    exposeHeaders: ['Content-Length'],
-    maxAge: 600,
+    origin: (origin) => {
+      const allowedOrigins = [
+        'https://skill-gap-frontend.vercel.app',
+        'http://localhost:3000', // or whatever your local frontend port is
+        'http://localhost:5173'  // common Vite port
+      ];
+      return allowedOrigins.includes(origin) ? origin : null;
+    },
     credentials: true,
   }));
 

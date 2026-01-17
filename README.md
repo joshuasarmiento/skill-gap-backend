@@ -1,139 +1,90 @@
-# Job Skills Scraper - Complete Setup Guide (NPM)
+# Job Skills Scraper & API
 
-## Step 1: Create Project Structure
+A production-ready full-stack application using **Hono**, **Drizzle ORM**, and **Turso** to scrape job demand data and serve it via a Vercel-hosted API.
 
-Open your terminal and run:
+## 🛠️ Tech Stack
+* **Framework:** Hono (Running on Node.js/Vercel)
+* **ORM:** Drizzle ORM
+* **Database:** Turso (libSQL)
+* **Scraper:** Playwright
+* **Deployment:** Vercel
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+* A [Turso](https://turso.tech) account and database.
+* Node.js (v20+ recommended).
+* Vercel CLI (optional for local testing).
+
+### 2. Environment Setup
+Create a `.env` file in the root directory and add your Turso credentials:
+```env
+TURSO_DATABASE_URL=libsql://your-db-name-username.turso.io
+TURSO_AUTH_TOKEN=your_jwt_auth_token_here
+NODE_ENV=development
+
+```
+
+### 3. Installation
 
 ```bash
-mkdir job-skills-scraper
-cd job-skills-scraper
+npm install
 
-# Create folder structure
-mkdir -p backend/src/db
-mkdir scraper
 ```
 
-Your structure should look like:
-```
-job-skills-scraper/
-├── backend/
-│   └── src/
-│       └── db/
-└── scraper/
-```
+### 4. Database Initialization
 
-## Step 2: Initialize NPM Project
+Synchronize your schema with the Turso cloud and seed the initial data:
 
 ```bash
-npm init -y
-```
+# Push schema to Turso
+npm run db:push
 
-This creates a `package.json` file.
-
-## Step 3: Install Dependencies
-
-```bash
-# Production dependencies
-npm install drizzle-orm hono playwright better-sqlite3 @hono/node-server
-
-# Development dependencies
-npm install -D drizzle-kit @types/better-sqlite3 @types/node ts-node typescript nodemon
-```
-
-Wait for installation to complete (this may take 2-3 minutes).
-
-## Step 4: Install Playwright Browser
-
-```bash
-npx playwright install chromium
-```
-
-This downloads the Chrome browser for scraping.
-
----
-
-## Step 5: Create Configuration Files
-
-I'll provide each file - create them exactly as shown.
-
-### File 1: `drizzle.config.ts` (in root folder)
-### File 2: `tsconfig.json` (in root folder) **IMPORTANT!**
-### File 3: `backend/src/db/schema.ts`
-### File 4: `backend/src/db/index.ts`
-### File 5: `scraper/skill-list.ts`
-### File 6: `scraper/index.ts`
-### File 7: `backend/src/index.ts`
-### File 8: `seed.ts` (in root folder)
-### File 9: Replace your `package.json`
-
----
-
-## Step 6: Setup Database
-
-```bash
-# Push the schema:
-npx drizzle-kit push
-
-# Seed initial data
+# Seed regions and skills
 npm run seed
+
 ```
 
-You should see "✅ Database seeding complete!"
+## 🏗️ Development & Production
 
-## Step 7: Run the Scraper
+### Local Development
+
+To run the Hono API server locally:
+
+```bash
+npm run dev
+
+```
+
+The server will start at `http://localhost:3000`.
+
+### Running the Scraper
+
+To populate the `skill_demand` table with live data from job boards:
 
 ```bash
 npm run scrape
+
 ```
 
-This will take 2-5 minutes. You'll see progress for each region.
+### Deployment to Vercel
 
-## Step 8: Start the API Server
+1. **Environment Variables:** Add `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` to your Vercel Project Settings.
+2. **Configuration:** The project uses `vercel.json` to route all `/api/*` requests to the Hono handler.
+3. **Build:** Ensure your build command is set to `npm run build`.
 
-```bash
-npm run server
-```
+## 📡 API Endpoints
 
-Server starts at `http://localhost:3000`
-
-## Step 9: Test the API
-
-Open a new terminal and run:
-
-```bash
-# Test 1: Get all regions
-curl http://localhost:3000/api/map-summary
-
-# Test 2: Get skills for Metro Manila
-curl http://localhost:3000/api/trends/metro-manila
-```
+* `GET /`: API health check.
+* `GET /api/map-summary`: Get all regions with total job demand.
+* `GET /api/trends/:slug`: Get top skill trends for a specific region.
+* `GET /api/export/summary`: Download national skill statistics.
 
 ---
 
-## Troubleshooting
+## 📂 Project Structure
 
-### "No regions found"
-Run: `npm run seed`
-
-### "Port already in use"
-Kill process: `lsof -ti:3000 | xargs kill -9`
-
-### Playwright errors
-Run: `npx playwright install chromium`
-
-### TypeScript errors
-Make sure `tsconfig.json` exists in root folder
-
-### "Cannot find module"
-All imports in TypeScript files must use `.js` extension (this is correct!)
-
----
-
-All file contents are in the following artifacts. Create each file carefully!
-
-**Key Differences from Bun:**
-- Uses `better-sqlite3` instead of `bun:sqlite`
-- Uses `ts-node` with ESM mode
-- Uses `@hono/node-server` for compatibility
-- Requires `tsconfig.json` configuration
-- All imports need `.js` extensions
+* `/api`: Hono API routes and Database connection.
+* `/api/db`: Drizzle schema and migration configurations.
+* `/scraper`: Playwright scraping logic and skill definitions.
+* `seed.ts`: Initial database population script.

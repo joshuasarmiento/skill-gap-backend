@@ -160,6 +160,8 @@ app.get('/api/export/summary', async (c) => {
 // Production
 export const GET = handle(app);
 export const POST = handle(app);
+export const PUT = handle(app);
+export const DELETE = handle(app);
 
 if (process.env.NODE_ENV !== 'production') {
   const port = 3000

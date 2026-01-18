@@ -13,6 +13,3 @@ export default defineConfig({
     authToken: process.env.TURSO_AUTH_TOKEN!,
   },
 });
-
-console.log("DB URL Loaded:", !!process.env.TURSO_DATABASE_URL);
-console.log("Auth Token Loaded:", !!process.env.TURSO_AUTH_TOKEN);

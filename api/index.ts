@@ -6,6 +6,8 @@ import { db } from './db/index';
 import { regions, skillDemand, skills } from './db/schema';
 import { eq, desc, sql, inArray } from 'drizzle-orm';
 import { NCR_DISTRICT_CONFIG } from './utils/ncrData';
+import runScraper from '../scraper/index';
+import seed from '../seed'
 
 const app = new Hono();
 
@@ -167,11 +169,33 @@ app.get('/api/export/summary', async (c) => {
   });
 });
 
+app.get('/api/scheduled-task', async (c) => {
+  const authHeader = c.req.header('Authorization');
+  
+  // Check if the request is authorized
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
+  try {
+    await runScraper();
+
+    return c.json({ 
+      success: true, 
+      message: 'Scrape completed successfully',
+      timestamp: new Date().toISOString() 
+    });
+  } catch (error) {
+    console.error('Scrape failed:', error);
+    return c.json({ error: 'Scrape failed' }, 500);
+  }
+});
+
 // Production
 export const GET = handle(app);
 export const POST = handle(app);
-export const PUT = handle(app);
-export const DELETE = handle(app);
+// export const PUT = handle(app);
+// export const DELETE = handle(app);
 
 if (process.env.NODE_ENV !== 'production') {
   const port = 3000

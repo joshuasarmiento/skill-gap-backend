@@ -76,4 +76,4 @@ async function runScraper() {
   process.exit(0);
 }
 
-runScraper();
+export default runScraper;

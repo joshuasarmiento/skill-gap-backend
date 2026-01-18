@@ -6,9 +6,9 @@ async function seed() {
   console.log('🧹 Clearing existing data...');
 
   // Delete the "child" table (demand) before the "parent" table (regions/skills)
-  // await db.delete(schema.skillDemand); 
-  // await db.delete(schema.regions);
-  // await db.delete(schema.skills);
+  await db.delete(schema.skillDemand); 
+  await db.delete(schema.regions);
+  await db.delete(schema.skills);
 
   console.log('🌱 Seeding fresh database...\n');
 
@@ -169,4 +169,4 @@ async function seed() {
   }
 }
 
-seed();
+export default seed;

@@ -1,0 +1,41 @@
+name: Scheduled Database Update
+
+on:
+  schedule:
+    - cron: '0 0 1 * *' # This triggers at 00:00 on day-of-month 1.
+  workflow_dispatch:
+
+jobs:
+  update-db:
+    runs-on: ubuntu-latest
+    
+    # Ensure these secrets are added to your GitHub Repository Settings
+    env:
+      TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+      TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+      NODE_ENV: production
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Push Database Schema
+        run: npm run db:push
+
+      - name: Seed Database
+        run: npm run seed
+
+      - name: Run Scraper
+        run: npm run scrape

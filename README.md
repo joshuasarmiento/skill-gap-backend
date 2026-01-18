@@ -1,26 +1,27 @@
-# Job Skills Scraper & API
+# Skill-Gap PH
 
-A production-ready full-stack application using **Hono**, **Drizzle ORM**, and **Turso** to scrape job demand data and serve it via a Vercel-hosted API.
+**Skill-Gap PH** is a data-driven labor market analytics platform designed to bridge the information gap between the Philippine workforce and the evolving needs of employers.
 
-## 🛠️ Tech Stack
-* **Framework:** Hono (Running on Node.js/Vercel)
-* **ORM:** Drizzle ORM
-* **Database:** Turso (libSQL)
-* **Scraper:** Playwright
-* **Deployment:** Vercel
+Traditional labor reports often take months to release. Skill-Gap PH provides a **monthly market snapshot** by analyzing thousands of public job advertisements across 88 regions to identify which qualifications are most valued by employers today.
 
-## 🚀 Getting Started
+## Tech Stack
+* **Framework:** [Hono](https://hono.dev/) (Running on Vercel)
+* **ORM:** [Drizzle ORM](https://orm.drizzle.team/)
+* **Database:** [Turso](https://turso.tech/) (Managed libSQL)
+* **Scraper:** [Playwright](https://playwright.dev/)
+* **Automation:** GitHub Actions
+
+## Getting Started
 
 ### 1. Prerequisites
-* A [Turso](https://turso.tech) account and database.
-* Node.js (v20+ recommended).
-* Vercel CLI (optional for local testing).
+* A Turso account and database.
+* Node.js (v20+).
 
 ### 2. Environment Setup
-Create a `.env` file in the root directory and add your Turso credentials:
+Create a `.env` file in the root directory:
 ```env
 TURSO_DATABASE_URL=libsql://your-db-name-username.turso.io
-TURSO_AUTH_TOKEN=your_jwt_auth_token_here
+TURSO_AUTH_TOKEN=your_auth_token
 NODE_ENV=development
 
 ```
@@ -32,59 +33,38 @@ npm install
 
 ```
 
-### 4. Database Initialization
+## Methodology & Automation
 
-Synchronize your schema with the Turso cloud and seed the initial data:
+The project is designed to act as a "digital census" of the Philippine job market.
 
-```bash
-# Push schema to Turso
-npm run db:push
+### Automated Monthly Updates
 
-# Seed regions and skills
-npm run seed
+The system is fully automated via **GitHub Actions**. On the 1st of every month, the following pipeline is triggered:
 
-```
+1. **Schema Sync:** `npm run db:push` ensures the Turso cloud database matches the local schema.
+2. **Seeding:** `npm run seed` refreshes core region and skill definitions.
+3. **Market Scanning:** `npm run scrape` launches a Playwright-based scraper to read thousands of job postings and update skill demand counts.
 
-## 🏗️ Development & Production
+### Deployment
 
-### Local Development
+* **Backend:** Hosted on **Vercel** as a Serverless Function.
+* **CORS:** Restricted to `https://skill-gap-frontend.vercel.app` for security.
 
-To run the Hono API server locally:
+## API Endpoints
 
-```bash
-npm run dev
+* `GET /api/map-summary`: Regional overview of job demand.
+* `GET /api/trends/:slug`: Specific skill breakdown for a province/city.
+* `GET /api/export/summary`: National skill statistics for data analysis.
 
-```
+## Project Structure
 
-The server will start at `http://localhost:3000`.
-
-### Running the Scraper
-
-To populate the `skill_demand` table with live data from job boards:
-
-```bash
-npm run scrape
-
-```
-
-### Deployment to Vercel
-
-1. **Environment Variables:** Add `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` to your Vercel Project Settings.
-2. **Configuration:** The project uses `vercel.json` to route all `/api/*` requests to the Hono handler.
-3. **Build:** Ensure your build command is set to `npm run build`.
-
-## 📡 API Endpoints
-
-* `GET /`: API health check.
-* `GET /api/map-summary`: Get all regions with total job demand.
-* `GET /api/trends/:slug`: Get top skill trends for a specific region.
-* `GET /api/export/summary`: Download national skill statistics.
+* `/api`: Hono API routes and Turso connection logic.
+* `/api/db`: Drizzle schema definitions.
+* `/scraper`: Playwright logic and skill categorization rules.
+* `.github/workflows`: Monthly automation logic.
 
 ---
 
-## 📂 Project Structure
+## ⚖️ Privacy & Ethics
 
-* `/api`: Hono API routes and Database connection.
-* `/api/db`: Drizzle schema and migration configurations.
-* `/scraper`: Playwright scraping logic and skill definitions.
-* `seed.ts`: Initial database population script.
+This tool exclusively analyzes public-facing job advertisements to identify market trends. It does not track individuals, personal resumes, or private corporate data.

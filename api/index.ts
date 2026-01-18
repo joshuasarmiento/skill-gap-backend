@@ -178,11 +178,15 @@ app.get('/api/scheduled-task', async (c) => {
   }
 
   try {
+    await db.delete(skillDemand);
+    await db.delete(regions);
+    await db.delete(skills);
+
     await runScraper();
 
     return c.json({ 
       success: true, 
-      message: 'Scrape completed successfully',
+      message: 'Database cleared and scrape completed successfully',
       timestamp: new Date().toISOString() 
     });
   } catch (error) {

@@ -1,38 +1,17 @@
-name: Scheduled Database Update
+name: Monthly Scraper Trigger
 
 on:
   schedule:
-    - cron: '0 0 1 * *' # This triggers at 00:00 on day-of-month 1.
-  workflow_dispatch:
+    # Runs at 00:00 on the 1st day of every month
+    - cron: '0 0 1 * *'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
 
 jobs:
-  update-db:
+  trigger-api:
     runs-on: ubuntu-latest
-    
-    # Ensure these secrets are added to your GitHub Repository Settings
-    env:
-      TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
-      TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
-      NODE_ENV: production
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Install Playwright Browsers
-        run: npx playwright install chromium --with-deps
-
-      - name: Seed Database
-        run: npm run seed
-
-      - name: Run Scraper
-        run: npm run scrape
+      - name: Call Scheduled Task Endpoint
+        run: |
+          curl -X GET "https://skill-gap-backend.vercel.app/api/scheduled-task" \
+          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+          -f # Fail the job if the HTTP status is 4xx or 5xx

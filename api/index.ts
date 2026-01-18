@@ -7,22 +7,21 @@ import { regions, skillDemand, skills } from './db/schema';
 import { eq, desc, sql, inArray } from 'drizzle-orm';
 import { NCR_DISTRICT_CONFIG } from './utils/ncrData';
 import runScraper from '../scraper/index';
-import seed from '../seed'
+import { secureHeaders } from 'hono/secure-headers';
 
 const app = new Hono();
 
-// Enable CORS for all API routes
+app.use('*', secureHeaders());
 app.use('/api/*', cors({
-    origin: (origin) => {
-      const allowedOrigins = [
-        'https://skill-gap-ph.vercel.app',
-        'http://localhost:3000', // or whatever your local frontend port is
-        'http://localhost:5173'  // common Vite port
-      ];
-      return allowedOrigins.includes(origin) ? origin : null;
-    },
-    credentials: true,
-  }));
+    origin: [
+      'https://skill-gap-ph.vercel.app', 
+      'https://skill-gap-frontend.vercel.app', // Added your other possible domain
+      'http://localhost:3000', 
+      'http://localhost:5173'
+    ],
+    allowMethods: ['GET', 'OPTIONS'], // Restrict to only what you need
+    maxAge: 600,
+}));
 
 // Home route
 app.get('/', (c) => {
@@ -178,9 +177,10 @@ app.get('/api/scheduled-task', async (c) => {
   }
 
   try {
-    await db.delete(skillDemand);
-    await db.delete(regions);
-    await db.delete(skills);
+    await db.transaction(async (tx) => {
+      await tx.delete(skillDemand);
+      // We usually keep regions and skills unless you need to refresh them
+    });
 
     await runScraper();
 

@@ -12,6 +12,6 @@ jobs:
     steps:
       - name: Call Scheduled Task Endpoint
         run: |
-          curl -X GET "https://skill-gap-backend.vercel.app/api/scheduled-task" \
+          curl -X GET "https://s-g-ap-vnhdiksx73rcusoebttiwhv5sybgbpk.vercel.app/api/scheduled-task" \
           -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
           -f # Fail the job if the HTTP status is 4xx or 5xx
